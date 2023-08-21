@@ -1,6 +1,12 @@
 
-upload_max_filesize = 40M
-post_max_size = 40M
+php_value memory_limit 30M
+php_value post_max_size 100M
+php_value upload_max_filesize 30M
+
+# ini_set('upload_max_filesize', '100M');
+# ini_set('post_max_size', '100M');
+# ini_set('max_input_time', 3000);
+# ini_set('max_execution_time', 3000);
 
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
