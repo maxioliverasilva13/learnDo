@@ -35,7 +35,7 @@ class EventoController extends Controller
 
     public function __construct()
     {
-        $this->middleware('jwt');
+        $this->middleware('jwt', ['except' => ["listarTendencias"]]);
     }
 
 
@@ -51,7 +51,7 @@ class EventoController extends Controller
                 throw new Exception("Datos invalidos");
             }
             $compraEvento = CompraEvento::where("estudiante_id", "=", $uid)->where("evento_id", "=", $eventoId)->first();
-             
+
             if (!isset($compraEvento)) {
                 $userInfo = Usuario::find($uid);
                 $eventoInfo = Evento::find($eventoId);
@@ -75,7 +75,7 @@ class EventoController extends Controller
                 $isSeminario = isset($existsSeminarioPresencial) || isset($existsSeminarioVirtual);
 
                 if ($isSeminario == true) {
-                    
+
                     if (isset($existsSeminarioPresencial)) {
                         $currentCapacidad = sizeof(CompraEvento::where("evento_id", "=", $eventoId)->get());
                         $capacidad = $existsSeminarioPresencial->maximo_participantes;
@@ -97,8 +97,8 @@ class EventoController extends Controller
                 //update ganancias_acumuladas
                 $currentEarnsEvent = Evento::find($eventoId);
                 $currentEarnsEvent->ganancias_acumuladas = ($monto + $currentEarnsEvent->ganancias_acumuladas);
-                $currentEarnsEvent->save();  
-        
+                $currentEarnsEvent->save();
+
             }
 
             return response()->json([
@@ -165,7 +165,7 @@ class EventoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)    
+    public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string',
@@ -236,7 +236,7 @@ class EventoController extends Controller
             $seminarioV->fecha = $request->fecha;
             $seminarioV->duracion = $request->duracion;
             $seminarioV->link = $request->link;
-            $seminarioV->zoomPass = $request->zoomPass; 
+            $seminarioV->zoomPass = $request->zoomPass;
             if (isset($request->estado)) {
                 $seminarioV->estado = $request->estado;
             } else {
@@ -320,7 +320,7 @@ class EventoController extends Controller
             }
 
             $misEventos = DB::table("eventos")->join('compraevento', 'compraevento.evento_id', '=', 'eventos.id')->where("compraevento.estudiante_id", $userId)->select("eventos.id","eventos.tipo")->get();
-           
+
             $result = array();
 
             if (isset($misEventos) && sizeof($misEventos) > 0) {
