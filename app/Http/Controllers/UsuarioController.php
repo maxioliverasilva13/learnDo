@@ -101,8 +101,8 @@ class UsuarioController extends Controller
             $organizador->save();
         }
 
-        $mailController = new MailController("Account Activation", $user->email);
-        $mailController->html_email_confirm_account($user->id);
+        // $mailController = new MailController("Account Activation", $user->email);
+        // $mailController->html_email_confirm_account($user->id);
 
         return response()->json([
             "ok" => true,
@@ -310,10 +310,9 @@ class UsuarioController extends Controller
     public function checkUserStatus($token)
     {
         $user = auth()->user();
-        if ($user->status_id === 1) {
-            return response()->json(["ok" => false, "message" => "Cuenta desactivada"]);
-        }
-        ;
+        // if ($user->status_id === 1) {
+        //     return response()->json(["ok" => false, "message" => "Cuenta desactivada"]);
+        // };
         return $this->createNewToken($token);
     }
 
